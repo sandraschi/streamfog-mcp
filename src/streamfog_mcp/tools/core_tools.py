@@ -10,13 +10,10 @@ from typing import Annotated
 
 from pydantic import Field
 
-from streamfog_mcp._mcp import mcp
-from streamfog_mcp.services.streamerbot import StreamerBotBridge
-
-_bridge = StreamerBotBridge()
+from streamfog_mcp._mcp import bridge, mcp
 
 
-@mcp.tool(annotations={"readOnlyHint": True})
+@mcp.tool(annotations={"readOnlyHint": True}, version="0.1.0")
 async def streamfog_status() -> dict:
     """Check the connection status to Streamfog via the Streamer.bot bridge.
 
@@ -30,11 +27,11 @@ async def streamfog_status() -> dict:
     ## Examples
     await streamfog_status()
     """
-    status = _bridge.status()
+    status = bridge.status()
     return {"success": True, "data": status}
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": False}, version="0.1.0")
 async def streamfog_set_lens(
     lens_identifier: Annotated[
         str,
@@ -61,7 +58,7 @@ async def streamfog_set_lens(
     if not lens_identifier.strip():
         return {"success": False, "message": "lens_identifier is required", "data": None}
 
-    result = await _bridge.set_lens(lens_identifier.strip())
+    result = await bridge.set_lens(lens_identifier.strip())
     if result["success"]:
         return {
             "success": True,
@@ -71,7 +68,7 @@ async def streamfog_set_lens(
     return {"success": False, "message": result["message"], "data": None}
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": False}, version="0.1.0")
 async def streamfog_clear_effects() -> dict:
     """Strip all active AR assets, face filters, and canvas overlays in Streamfog.
 
@@ -85,7 +82,7 @@ async def streamfog_clear_effects() -> dict:
     ## Examples
     await streamfog_clear_effects()
     """
-    result = await _bridge.clear_effects()
+    result = await bridge.clear_effects()
     if result["success"]:
         return {
             "success": True,
@@ -95,7 +92,7 @@ async def streamfog_clear_effects() -> dict:
     return {"success": False, "message": result["message"], "data": None}
 
 
-@mcp.tool()
+@mcp.tool(annotations={"readOnlyHint": False}, version="0.1.0")
 async def streamfog_toggle_avatar() -> dict:
     """Toggle the Vtuber-style avatar overlay on or off in Streamfog.
 
@@ -110,7 +107,7 @@ async def streamfog_toggle_avatar() -> dict:
     ## Examples
     await streamfog_toggle_avatar()
     """
-    result = await _bridge.toggle_avatar()
+    result = await bridge.toggle_avatar()
     if result["success"]:
         return {
             "success": True,
@@ -120,7 +117,7 @@ async def streamfog_toggle_avatar() -> dict:
     return {"success": False, "message": result["message"], "data": None}
 
 
-@mcp.tool(annotations={"readOnlyHint": True})
+@mcp.tool(annotations={"readOnlyHint": True}, version="0.1.0")
 async def streamfog_list_lenses(
     reload: Annotated[
         bool,
@@ -143,10 +140,10 @@ async def streamfog_list_lenses(
     from streamfog_mcp.config import get_settings
 
     if reload:
-        _bridge.reload_lens_map()
+        bridge.reload_lens_map()
 
     settings = get_settings()
-    lenses = dict(_bridge._lens_map) if hasattr(_bridge, "_lens_map") else {}
+    lenses = dict(bridge._lens_map) if hasattr(bridge, "_lens_map") else {}
     return {
         "success": True,
         "data": {

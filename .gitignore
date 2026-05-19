@@ -13,3 +13,8 @@ node_modules/
 Thumbs.db
 uv.lock
 .vite/
+
+# Tauri native build artifacts
+native/binaries/
+native/target/
+native/gen/

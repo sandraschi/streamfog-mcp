@@ -13,18 +13,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastmcp import FastMCP
 
-from streamfog_mcp._mcp import mcp
+from streamfog_mcp._mcp import bridge, mcp
 from streamfog_mcp.config import get_settings
-from streamfog_mcp.services.streamerbot import StreamerBotBridge
 
 # Tool registration side-effect (triggers @mcp.tool() decorators)
 from . import tools  # noqa: F401
 
 logger = logging.getLogger("streamfog-mcp")
-
-# ── Shared bridge instance ───────────────────────────────────────────────────
-
-_bridge = StreamerBotBridge()
 
 
 # ── Lifespan ─────────────────────────────────────────────────────────────────
@@ -33,16 +28,16 @@ _bridge = StreamerBotBridge()
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     settings = get_settings()
-    _bridge.load_lens_map()
+    bridge.load_lens_map()
     logger.info(
         "Streamfog MCP startup — port=%s streamerbot=%s:%s lenses=%d",
         settings.port,
         settings.streamerbot_host,
         settings.streamerbot_port,
-        len(_bridge._lens_map),
+        len(bridge._lens_map),
     )
     yield
-    await _bridge.disconnect()
+    await bridge.disconnect()
 
 
 # ── FastAPI App ──────────────────────────────────────────────────────────────
@@ -59,12 +54,12 @@ mcp_app = FastMCP.from_fastapi(app, name="Streamfog MCP")
 @app.get("/api/v1/status")
 async def api_status():
     """Server status including Streamer.bot bridge health."""
-    bridge_status = _bridge.status()
+    bridge_status = bridge.status()
     return {
         "ok": True,
         "version": "0.1.0",
         "bridge": bridge_status,
-        "lenses": len(_bridge._lens_map),
+        "lenses": len(bridge._lens_map),
     }
 
 
@@ -74,18 +69,11 @@ async def api_list_lenses():
     return {
         "success": True,
         "data": {
-            "lenses": _bridge._lens_map,
-            "count": len(_bridge._lens_map),
-            "path": get_settings().lens_map_path,
+        "lenses": bridge._lens_map,
+        "count": len(bridge._lens_map),
+        "path": get_settings().lens_map_path,
         },
     }
-
-
-class SetLensRequest:
-    """Request body for lens activation via REST."""
-
-    def __init__(self, lens_identifier: str = ""):
-        self.lens_identifier = lens_identifier
 
 
 @app.post("/api/v1/lenses/set")
@@ -116,7 +104,7 @@ async def api_toggle_avatar():
 @app.post("/api/v1/lenses/reload")
 async def api_reload_lenses():
     """Reload the lens map from disk."""
-    lenses = _bridge.reload_lens_map()
+    lenses = bridge.reload_lens_map()
     return {"success": True, "data": {"lenses": lenses, "count": len(lenses)}}
 
 

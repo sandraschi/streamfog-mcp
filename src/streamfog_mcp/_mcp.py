@@ -1,6 +1,8 @@
-"""FastMCP singleton — created before tools are imported to break circular dependency."""
+"""FastMCP singleton + shared bridge — created before tools are imported to break circular dependency."""
 
 from fastmcp import FastMCP
+
+from streamfog_mcp.services.streamerbot import StreamerBotBridge
 
 DESCRIPTION = """\
 # Streamfog MCP — AR Lens Orchestrator for Live Streams
@@ -60,6 +62,9 @@ mcp = FastMCP(
     version="0.1.0",
     instructions=DESCRIPTION,
 )
+
+# Shared bridge — single instance used by both MCP tools and REST API
+bridge = StreamerBotBridge()
 
 
 @mcp.resource("resource://streamfog/prerequisites")
