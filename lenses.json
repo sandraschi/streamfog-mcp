@@ -1,0 +1,6 @@
+{
+  "_comment": "Streamfog lens → Streamer.bot action mappings. Add your own entries below.",
+  "beauty_smooth": "SetLens_BeautySmooth",
+  "cyber_helmet": "SetLens_CyberHelmet",
+  "vtuber_avatar": "SetLens_VTuberAvatar"
+}
