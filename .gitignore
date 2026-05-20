@@ -14,6 +14,9 @@ Thumbs.db
 uv.lock
 .vite/
 
+# Dashboard cache
+_dashboard/
+
 # Tauri native build artifacts
 native/binaries/
 native/target/

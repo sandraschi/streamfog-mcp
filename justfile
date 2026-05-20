@@ -1,7 +1,13 @@
+set windows-shell := ["pwsh.exe", "-NoLogo", "-Command"]
+
 # streamfog-mcp task runner (fleet standard)
 # Usage: just [recipe]
 
 set positional-arguments := true
+
+# Open the interactive recipe dashboard in the browser
+default:
+    @pwsh.exe -NoProfile -ExecutionPolicy Bypass -File ../mcp-central-docs/scripts/just-dashboard.ps1 -Path .
 
 # Install deps + create venv
 bootstrap:
