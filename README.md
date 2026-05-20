@@ -8,6 +8,9 @@
   <a href="https://github.com/PrefectHQ/fastmcp"><img src="https://img.shields.io/badge/FastMCP-3.2-7c5cfc?style=flat-square" alt="FastMCP"></a>
 </p>
 
+
+> 📖 **[Installation Guide](INSTALL.md)** — quick start, manual setup, and troubleshooting
+
 **AI-driven AR lens orchestrator for live OBS streams.** Control Streamfog face filters, AR effects, and Vtuber avatars through MCP tools via the local Streamer.bot WebSocket bridge. Your AI assistant becomes a stream producer.
 
 | | |
