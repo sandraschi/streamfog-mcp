@@ -48,3 +48,5 @@ uv run pytest tests/ -v
 1. Run `just lint`
 2. Run `just test`
 3. Verify `start.ps1` works
+
+Install docs: follow mcp-central-docs/standards/AGENT_INSTALL_REFERENCE.md
