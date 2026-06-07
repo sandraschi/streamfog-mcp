@@ -1,4 +1,4 @@
-# start.ps1 — Streamfog MCP + Webapp
+# start.ps1 - Streamfog MCP + Webapp
 $WebPort = 10995
 $ApiPort = 10994
 

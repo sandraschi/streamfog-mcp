@@ -1,4 +1,4 @@
-set windows-shell := ["pwsh.exe", "-NoLogo", "-Command"]
+﻿set windows-shell := ["pwsh.exe", "-NoLogo", "-Command"]
 
 # streamfog-mcp task runner (fleet standard)
 # Usage: just [recipe]
@@ -7,7 +7,7 @@ set positional-arguments := true
 
 # Open the interactive recipe dashboard in the browser
 default:
-    @pwsh.exe -NoProfile -ExecutionPolicy Bypass -File ../mcp-central-docs/scripts/just-dashboard.ps1 -Path .
+    @just --list
 
 # Install deps + create venv
 bootstrap:
@@ -33,6 +33,9 @@ fix:
 test:
     uv run pytest tests/ -v
 
+e2e:
+    pwsh -NoLogo -NoProfile -ExecutionPolicy Bypass -File "D:\Dev\repos\mcp-central-docs\scripts\playwright-audit.ps1" -RepoPath "{{justfile_directory()}}"
+
 # Clean build artifacts
 clean:
     Remove-Item -Recurse -Force .venv, .ruff_cache, __pycache__, src/streamfog_mcp/__pycache__, tests/__pycache__, webapp/node_modules, webapp/dist -ErrorAction SilentlyContinue
@@ -52,3 +55,4 @@ build-native-debug:
     Set-Location '{{justfile_directory()}}\native'
     $env:Path = "$env:USERPROFILE\.cargo\bin;$env:Path"
     npx @tauri-apps/cli build --debug
+
