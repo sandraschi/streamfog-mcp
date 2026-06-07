@@ -1,3 +1,7 @@
+﻿
+# Fast port helpers (scripts/PortHelpers.ps1)
+$__PortHelpers = Join-Path $PSScriptRoot 'scripts\PortHelpers.ps1'
+if (Test-Path -LiteralPath $__PortHelpers) { . $__PortHelpers }
 # start.ps1 - Streamfog MCP + Webapp
 $WebPort = 10995
 $ApiPort = 10994
@@ -30,3 +34,4 @@ Write-Host "MCP SSE:       http://localhost:$ApiPort/sse" -ForegroundColor Green
 Write-Host ""
 Write-Host "Opening webapp in default browser..." -ForegroundColor Cyan
 Start-Process "http://localhost:$WebPort"
+
