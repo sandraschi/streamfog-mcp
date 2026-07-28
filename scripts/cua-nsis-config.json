@@ -1,0 +1,14 @@
+{
+  "product_name": "Streamfog MCP",
+  "install_dir": "%LOCALAPPDATA%\\Streamfog MCP",
+  "operator_exe": "streamfog-mcp-operator.exe",
+  "backend_process_names": ["streamfog-mcp-operator", "streamfog-mcp-backend"],
+  "backend_port": 10994,
+  "health_path": "/api/v1/status",
+  "diagnostics_path": "/api/v1/diagnostics",
+  "feature_smoke_path": "/api/v1/status",
+  "window_title_re": "Streamfog MCP",
+  "nsis_glob": "native/target/release/bundle/nsis/Streamfog MCP_*_x64-setup.exe",
+  "bridge_ok_text": "running",
+  "uninstall_registry_filter": "*Streamfog*"
+}

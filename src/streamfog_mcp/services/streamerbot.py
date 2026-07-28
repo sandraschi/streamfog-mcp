@@ -121,7 +121,11 @@ class StreamerBotBridge:
         if not self._ws:
             success = await self.connect()
             if not success:
-                return {"success": False, "message": f"Not connected to Streamer.bot: {self._last_error}", "action": action_name}
+                return {
+                    "success": False,
+                    "message": f"Not connected to Streamer.bot: {self._last_error}",
+                    "action": action_name,
+                }
 
         request_id = f"mcp-{int(time.time() * 1000)}"
         msg = {
@@ -135,7 +139,12 @@ class StreamerBotBridge:
         try:
             await self._ws.send(json.dumps(msg))
             logger.info("Dispatched action '%s' to Streamer.bot (id=%s)", action_name, request_id)
-            return {"success": True, "message": f"Action '{action_name}' dispatched", "action": action_name, "request_id": request_id}
+            return {
+                "success": True,
+                "message": f"Action '{action_name}' dispatched",
+                "action": action_name,
+                "request_id": request_id,
+            }
         except Exception as e:
             self._ws = None
             self._last_error = str(e)

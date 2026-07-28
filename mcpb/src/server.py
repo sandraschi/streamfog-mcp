@@ -47,13 +47,13 @@ app = FastAPI(lifespan=lifespan, title="Streamfog MCP", version="0.1.0")
 _tauri_desktop = os.environ.get("STREAMFOG_TAURI", "").lower() in ("1", "true", "yes")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://127.0.0.1:10994",
-        "http://localhost:10994",
-        "http://goliath:10994",
-        "http://127.0.0.1:10995",
-        "http://localhost:10995",
-        "http://goliath:10995",
+        allow_origins=[
+            "http://127.0.0.1:10994",
+            "http://localhost:10994",
+            "http://goliath:10994",
+            "http://127.0.0.1:10995",
+            "http://localhost:10995",
+            "http://goliath:10995",
         "http://tauri.localhost",
         "https://tauri.localhost",
         "tauri://localhost",
@@ -88,9 +88,9 @@ async def api_list_lenses():
     return {
         "success": True,
         "data": {
-            "lenses": bridge._lens_map,
-            "count": len(bridge._lens_map),
-            "path": get_settings().lens_map_path,
+        "lenses": bridge._lens_map,
+        "count": len(bridge._lens_map),
+        "path": get_settings().lens_map_path,
         },
     }
 

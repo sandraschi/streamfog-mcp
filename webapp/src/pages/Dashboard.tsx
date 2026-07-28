@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { API_BASE } from "../lib/api";
 import { Camera, Eye, EyeOff, RefreshCw, Sparkles, Wand2 } from "lucide-react";
 
 interface BridgeStatus {
@@ -21,12 +22,12 @@ interface LensEntry {
 }
 
 async function apiGet(path: string) {
-  const res = await fetch(`/api${path}`);
+  const res = await fetch(API_BASE + `/api${path}`);
   return res.json();
 }
 
 async function apiPost(path: string, body?: Record<string, unknown>) {
-  const res = await fetch(`/api${path}`, {
+  const res = await fetch(API_BASE + `/api${path}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: body ? JSON.stringify(body) : undefined,

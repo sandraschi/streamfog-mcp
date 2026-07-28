@@ -10,6 +10,7 @@
   "app": {
     "windows": [
       {
+        "label": "main",
         "title": "Streamfog MCP",
         "width": 1100,
         "height": 750,
@@ -31,7 +32,15 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
-    "externalBin": ["binaries/streamfog-mcp-backend"]
+    "resources": ["resources/streamfog-mcp-backend.exe",
+            "resources/.env"],
+    "windows": {
+      "webviewInstallMode": { "type": "skip" },
+      "nsis": {
+        "installMode": "currentUser",
+        "installerHooks": "./windows/hooks.nsh",
+}
+    }
   },
   "plugins": {
     "shell": {
@@ -45,3 +54,5 @@
     }
   }
 }
+
+
