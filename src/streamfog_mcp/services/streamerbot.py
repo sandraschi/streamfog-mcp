@@ -93,8 +93,8 @@ class StreamerBotBridge:
         if self._ws:
             try:
                 await self._ws.close()
-            except Exception:
-                pass
+            except Exception as e:
+                logger.warning("Error closing Streamer.bot connection: %s", e)
             self._ws = None
             self._connected_at = None
             logger.info("Disconnected from Streamer.bot")
@@ -137,7 +137,9 @@ class StreamerBotBridge:
             msg["action"]["arguments"] = args
 
         try:
-            await self._ws.send(json.dumps(msg))
+            ws = self._ws
+            assert ws is not None
+            await ws.send(json.dumps(msg))
             logger.info("Dispatched action '%s' to Streamer.bot (id=%s)", action_name, request_id)
             return {
                 "success": True,
@@ -175,7 +177,16 @@ class StreamerBotBridge:
 
     @property
     def is_connected(self) -> bool:
-        return self._ws is not None and not self._ws.closed if self._ws else False
+        ws = self._ws
+        if ws is None:
+            return False
+        # websockets >=12 removed `.closed`; fall back to state inspection
+        closed = getattr(ws, "closed", None)
+        if closed is not None:
+            return not closed
+        from websockets.protocol import State
+
+        return getattr(ws, "state", None) is not State.CLOSED
 
     @property
     def connected_at(self) -> float | None:

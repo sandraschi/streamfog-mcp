@@ -1,0 +1,25 @@
+# Streamfog MCP - Windsurf rules
+
+## Session Context (Streamfog MCP)
+
+You can control Streamfog AR lenses, face filters, and Vtuber avatars on the
+live OBS stream via the Streamer.bot bridge (5 MCP tools: streamfog_status,
+streamfog_set_lens, streamfog_clear_effects, streamfog_toggle_avatar,
+streamfog_list_lenses).
+
+**Before starting work:**
+1. Check bridge health: streamfog_status()
+2. List available lenses: streamfog_list_lenses()
+
+**At end of work, save state:**
+- Confirm the last dispatched action resolved to the intended lens or effect
+- If lenses.json was edited, reload with streamfog_list_lenses(reload=True)
+
+## Coding rules
+
+- Python: ruff (line-length 120), type hints on all public functions
+- FastMCP tools live in `src/streamfog_mcp/tools/`; register via `@mcp.tool()`
+- REST endpoints live in `src/streamfog_mcp/server.py` (FastAPI gateway)
+- Ports: backend 10994, frontend 10995 (fleet registry - never change)
+- Frontend: React + Vite + Tailwind + Zustand; run `biome check src/`
+- Never bundle `.env` into builds - only `.env.example`

@@ -1,0 +1,26 @@
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.16.0
+    hooks:
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix, src, tests]
+        pass_filenames: false
+      - id: ruff-format
+        pass_filenames: false
+
+  - repo: local
+    hooks:
+      - id: biome
+        name: Biome check (frontend)
+        entry: pwsh -NoProfile -ExecutionPolicy Bypass -File scripts/pre-commit-biome.ps1
+        language: system
+        pass_filenames: false
+
+  - repo: local
+    hooks:
+      - id: em-dash-guard
+        name: Em-dash guard (ps1/bat/justfile)
+        entry: powershell.exe -NoProfile -ExecutionPolicy Bypass -File scripts/em-dash-guard.ps1
+        language: system
+        types: [text]
+        pass_filenames: false

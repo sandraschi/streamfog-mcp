@@ -1,0 +1,25 @@
+{
+  "$schema": "https://glama.ai/mcp/schemas/server.json",
+  "name": "streamfog-mcp",
+  "description": "AI-driven AR lens orchestrator for live OBS streams. Control Streamfog face filters, AR effects, and Vtuber avatars through MCP tools via the local Streamer.bot WebSocket bridge.",
+  "categories": ["media", "streaming", "automation"],
+  "tags": ["obs", "streamerbot", "streamfog", "ar", "vtuber", "lens"],
+  "github": "https://github.com/sandraschi/streamfog-mcp",
+  "version": "0.1.0",
+  "language": "python",
+  "license": "MIT",
+  "transport": ["stdio", "streamable-http"],
+  "features": {
+    "tools": true,
+    "resources": true,
+    "prompts": false,
+    "sampling": false
+  },
+  "tools": [
+    { "name": "streamfog_status", "description": "Bridge connection health + lens count" },
+    { "name": "streamfog_set_lens", "description": "Activate a specific AR lens or face filter" },
+    { "name": "streamfog_clear_effects", "description": "Strip all effects, return camera to baseline" },
+    { "name": "streamfog_toggle_avatar", "description": "Toggle Vtuber-style avatar on/off" },
+    { "name": "streamfog_list_lenses", "description": "List all configured lenses from lenses.json" }
+  ]
+}

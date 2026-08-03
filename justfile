@@ -10,9 +10,10 @@ set positional-arguments := true
 default:
     @just --list
 
-# Install deps + create venv
+# Install deps + create venv + pre-commit hook
 bootstrap:
     uv sync
+    uv run pre-commit install 2>$null
 
 # Run backend (stdio transport)
 serve:
@@ -30,6 +31,10 @@ lint:
 fix:
     C:\Users\sandr\AppData\Local\Programs\Python\Python313\Scripts\ruff.exe check --fix src/ tests/
 
+# Format Python sources
+fmt:
+    C:\Users\sandr\AppData\Local\Programs\Python\Python313\Scripts\ruff.exe format src/ tests/
+
 # Run tests
 test:
     uv run pytest tests/ -v
@@ -45,7 +50,7 @@ clean:
 health:
     curl -s http://localhost:10994/api/v1/status | ConvertFrom-Json
 
-# Build Tauri native desktop app (release — full pipeline)
+# Build Tauri native desktop app (release - full pipeline)
 build-native:
     Set-Location '{{justfile_directory()}}\native'
     $env:Path = "$env:USERPROFILE\.cargo\bin;$env:Path"
@@ -57,3 +62,5 @@ build-native-debug:
     $env:Path = "$env:USERPROFILE\.cargo\bin;$env:Path"
     npx @tauri-apps/cli build --debug
 
+
+# Bootstrap: install dev deps + pre-commit hook

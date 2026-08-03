@@ -1,0 +1,10 @@
+{
+  "auto_load": ["session-start"],
+  "skills": {
+    "session-start": {
+      "name": "session-start",
+      "description": "Streamfog MCP tool awareness - bridge health and lens inventory",
+      "content": "## Session Context (Streamfog MCP)\n\nYou can control Streamfog AR lenses, face filters, and Vtuber avatars on the live OBS stream via the Streamer.bot bridge.\n\n**Before starting work:**\n1. Check bridge health: streamfog_status()\n2. List available lenses: streamfog_list_lenses()\n\n**At end of work, save state:**\n- Confirm the last dispatched action resolved to the intended lens or effect\n- If lenses.json was edited, reload with streamfog_list_lenses(reload=True)"
+    }
+  }
+}

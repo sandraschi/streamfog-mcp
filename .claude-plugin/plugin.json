@@ -1,0 +1,6 @@
+{
+  "name": "streamfog-mcp",
+  "version": "0.1.0",
+  "description": "Claude Code plugin for Streamfog MCP - AR lens orchestration for OBS via Streamer.bot",
+  "hooks": "../hooks/hooks.json"
+}

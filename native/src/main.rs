@@ -14,6 +14,7 @@ async fn start_backend(
 
 fn main() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_process::init())
         .manage(BackendProcess(std::sync::Mutex::new(None)))

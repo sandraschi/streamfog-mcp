@@ -70,13 +70,24 @@ bridge = StreamerBotBridge()
 @mcp.resource("resource://streamfog/prerequisites")
 def get_prerequisites() -> str:
     return """\
-# Streamfog MCP — Prerequisites Checklist
+# Streamfog MCP - Prerequisites Checklist
 
 1. [ ] Streamfog installed from https://streamfog.com
 2. [ ] Streamer.bot installed from https://streamer.bot
-3. [ ] Streamfog → Streamer.bot integration enabled in Streamfog's Integrations panel
-4. [ ] Streamer.bot WebSocket server enabled (Settings → WebSocket Server)
+3. [ ] Streamfog -> Streamer.bot integration enabled in Streamfog's Integrations panel
+4. [ ] Streamer.bot WebSocket server enabled (Settings -> WebSocket Server)
 5. [ ] Actions created in Streamer.bot: SetLens_*, ClearEffects, ToggleAvatar
-6. [ ] lenses.json populated with your action→lens mappings
+6. [ ] lenses.json populated with your action->lens mappings
 7. [ ] STREAMFOG_MCP_STREAMERBOT_TOKEN set if using token auth
 """
+
+
+@mcp.resource("skill://streamfog/SKILL.md")
+def get_streamfog_skill() -> str:
+    """Expose the Streamfog expert skill as an MCP resource."""
+    from pathlib import Path
+
+    skill_path = Path(__file__).parent / "skills" / "streamfog" / "SKILL.md"
+    if skill_path.exists():
+        return skill_path.read_text(encoding="utf-8")
+    return "Streamfog expert skill not found."

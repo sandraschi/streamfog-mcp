@@ -1,0 +1,13 @@
+# Streamfog MCP
+
+AI-driven AR lens orchestrator for live OBS streams. Control Streamfog face
+filters, AR effects, and Vtuber avatars through MCP tools via the local
+Streamer.bot WebSocket bridge.
+
+- [Full documentation](llms-full.txt) - tools, endpoints, config, architecture
+- [README](README.md) - quick start
+- [Installation](INSTALL.md) - install guide
+- [docs/TOOLS.md](docs/TOOLS.md) - tool reference
+- [docs/CONFIGURATION.md](docs/CONFIGURATION.md) - configuration reference
+- [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) - troubleshooting
+- [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) - development guide

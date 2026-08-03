@@ -1,14 +1,25 @@
 {
   "product_name": "Streamfog MCP",
   "install_dir": "%LOCALAPPDATA%\\Streamfog MCP",
-  "operator_exe": "streamfog-mcp-operator.exe",
-  "backend_process_names": ["streamfog-mcp-operator", "streamfog-mcp-backend"],
+  "operator_exe": "streamfog-mcp-native.exe",
+  "backend_process_names": ["streamfog-mcp-native", "streamfog-mcp-backend"],
   "backend_port": 10994,
-  "health_path": "/api/v1/status",
+  "frontend_port": 10995,
+  "backend_module": "streamfog_mcp.server",
+  "health_path": "/api/health",
   "diagnostics_path": "/api/v1/diagnostics",
-  "feature_smoke_path": "/api/v1/status",
+  "feature_smoke_path": "/api/health",
   "window_title_re": "Streamfog MCP",
   "nsis_glob": "native/target/release/bundle/nsis/Streamfog MCP_*_x64-setup.exe",
   "bridge_ok_text": "running",
-  "uninstall_registry_filter": "*Streamfog*"
+  "uninstall_registry_filter": "*Streamfog*",
+  "nav_routes": [
+    ["Dashboard", "Dashboard"],
+    ["Tools", "Tools"],
+    ["Chat", "Chat"],
+    ["Settings", "Settings"],
+    ["Help", "Help"]
+  ],
+  "connected_badge_text": "online",
+  "connected_timeout": 60
 }

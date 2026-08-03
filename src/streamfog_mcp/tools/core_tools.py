@@ -28,7 +28,16 @@ async def streamfog_status() -> dict:
     await streamfog_status()
     """
     status = bridge.status()
-    return {"success": True, "data": status}
+    connected = status.get("connected", False)
+    return {
+        "success": True,
+        "message": (
+            "Connected to Streamer.bot bridge"
+            if connected
+            else "Streamer.bot bridge not connected - check Streamer.bot is running"
+        ),
+        "data": status,
+    }
 
 
 @mcp.tool(annotations={"readOnlyHint": False}, version="0.1.0")
@@ -146,6 +155,7 @@ async def streamfog_list_lenses(
     lenses = dict(bridge._lens_map) if hasattr(bridge, "_lens_map") else {}
     return {
         "success": True,
+        "message": f"{len(lenses)} lenses available from {settings.lens_map_path}",
         "data": {
             "lenses": lenses,
             "count": len(lenses),

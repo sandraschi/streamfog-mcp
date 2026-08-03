@@ -1,0 +1,7 @@
+# Fleet LF normalization - prevents CRLF churn and Biome CI issues
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.ico binary
+*.exe binary
+*.mcpb binary

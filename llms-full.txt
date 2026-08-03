@@ -1,0 +1,107 @@
+# Streamfog MCP — Full Documentation
+
+AI-driven AR lens orchestrator for live OBS streams. Controls Streamfog face
+filters, AR effects, and Vtuber avatars through MCP tools via the local
+Streamer.bot WebSocket bridge.
+
+## Quick Facts
+
+- Ports: backend 10994 (FastAPI + FastMCP streamable HTTP at /mcp), frontend 10995 (Vite)
+- Repo: https://github.com/sandraschi/streamfog-mcp
+- Start: `uv sync` then `start.ps1` (or `uv run -m streamfog_mcp --stdio` for MCP-only)
+- Python: >=3.12, FastMCP >=3.4.4
+
+## Architecture
+
+```
+LLM Agent -> streamfog-mcp (:10994) -> Streamer.bot WebSocket (:8080) -> Streamfog Desktop -> OBS
+                         \-> FastAPI REST (/api/*) -> React Dashboard (:10995)
+MCP endpoint: http://127.0.0.1:10994/mcp (streamable HTTP) or stdio
+```
+
+## MCP Tools (5)
+
+| Tool | Description | Params |
+|------|-------------|--------|
+| `streamfog_status` | Bridge connection health + lens count | none |
+| `streamfog_set_lens` | Activate a specific AR lens or face filter | `lens_identifier` (required) |
+| `streamfog_clear_effects` | Strip all effects, return camera to baseline | none |
+| `streamfog_toggle_avatar` | Toggle Vtuber-style avatar on/off | none |
+| `streamfog_list_lenses` | List configured lenses from lenses.json | `reload` (bool, default false) |
+
+All tools return `{success, message, data}`. Actions are fire-and-forget:
+Streamer.bot does not report outcomes.
+
+## REST API
+
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `/api/health` | GET | Liveness probe (status, version, uptime, tool_count, providers) |
+| `/api/v1/status` | GET | Server + bridge health |
+| `/api/v1/lenses` | GET | List lenses |
+| `/api/v1/lenses/set` | POST | Activate lens `{"lens_identifier": "..."}` |
+| `/api/v1/lenses/reload` | POST | Reload lens map |
+| `/api/v1/effects/clear` | POST | Clear all effects |
+| `/api/v1/avatar/toggle` | POST | Toggle avatar |
+| `/api/tools` | GET | Dynamic tool list with schemas |
+| `/api/capabilities` | GET | Capability discovery |
+| `/api/skills` | GET | Skill list |
+| `/api/skills/{name}` | GET | Skill content (markdown) |
+| `/api/llm/discover` | GET | Ollama/LM Studio/vLLM probe + GPU detection |
+| `/api/logs` | GET | Ring-buffer log window (source/level/search/limit) |
+| `/api/v1/diagnostics` | GET | Tool list, system info, errors (CUA-NSIS) |
+
+## Configuration
+
+All env vars use prefix `STREAMFOG_MCP_` (also read from `.env` at repo root):
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `STREAMFOG_MCP_STREAMERBOT_HOST` | `127.0.0.1` | Streamer.bot WebSocket host |
+| `STREAMFOG_MCP_STREAMERBOT_PORT` | `8080` | Streamer.bot WebSocket port |
+| `STREAMFOG_MCP_STREAMERBOT_TOKEN` | - | Streamer.bot auth token |
+| `STREAMFOG_MCP_LENS_MAP_PATH` | `lenses.json` | Lens-to-action mapping file |
+| `STREAMFOG_MCP_PORT` | `10994` | Backend port |
+| `STREAMFOG_MCP_HOST` | `127.0.0.1` | Backend bind host |
+| `STREAMFOG_MCP_LOG_LEVEL` | `INFO` | Logging level |
+
+## Lens Map (lenses.json)
+
+```json
+{
+  "beauty_smooth": "SetLens_BeautySmooth",
+  "cyber_helmet": "SetLens_CyberHelmet",
+  "vtuber": "SetLens_VTuberAvatar"
+}
+```
+
+Keys beginning with `_` are ignored. Unknown identifiers fall back to the
+constructed action name `SetLens_{identifier}`.
+
+## Dual Transport
+
+`run_server.py` (PyInstaller entry) reads `MCP_PORT`/`MCP_HOST` env vars:
+when set, starts in dual mode (REST + MCP at /mcp) on that port; otherwise
+runs stdio mode. The Tauri wrapper sets these vars when spawning.
+
+## MCP Client Registration
+
+- Claude Desktop / Cursor / opencode: stdio entry running `streamfog-mcp`
+  (or `uv run -m streamfog_mcp --stdio`)
+- HTTP: `http://127.0.0.1:10994/mcp` with streamable HTTP protocol
+
+## Testing
+
+```powershell
+uv run pytest tests/ -v
+cd webapp && npx playwright test   # e2e (backend auto-started)
+```
+
+## Troubleshooting
+
+- "Not connected to Streamer.bot": enable Streamer.bot WebSocket server, check port 8080
+- "Dispatch failed" auth error: match STREAMFOG_MCP_STREAMERBOT_TOKEN to Streamer.bot token
+- Action sent but nothing happens: action name mismatch in lenses.json vs Streamer.bot Actions
+- Zero lenses: lenses.json missing/invalid at STREAMFOG_MCP_LENS_MAP_PATH
+
+See [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) for the full guide.
