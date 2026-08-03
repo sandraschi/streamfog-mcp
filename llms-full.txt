@@ -4,6 +4,29 @@ AI-driven AR lens orchestrator for live OBS streams. Controls Streamfog face
 filters, AR effects, and Vtuber avatars through MCP tools via the local
 Streamer.bot WebSocket bridge.
 
+## What is Streamfog? (read this first)
+
+Streamfog is a Windows desktop app (https://streamfog.com) that streamers use
+to put AR effects on their face during live broadcasts: face filters,
+animated lenses, background effects, and Vtuber-style avatars. It applies the
+effect to the webcam feed in real time and renders into OBS Studio via a
+browser source.
+
+Automation constraints that shape everything this server does:
+
+1. Streamfog has NO public API, CLI, or plugin SDK - it cannot be scripted
+   directly and cannot report which lens is active (it is a black box).
+2. The only control path is Streamer.bot (https://streamer.bot), a free
+   streamer automation tool. Streamfog registers as a Streamer.bot
+   integration; Streamer.bot exposes a local WebSocket server that accepts
+   DoAction commands by exact action name (e.g. `SetLens_BeautySmooth`).
+3. Actions are fire-and-forget: Streamer.bot does not return success/failure
+   for action execution, so tool "success" means *dispatched*, not *applied*.
+   The server (and any agent using it) cannot know the live lens state.
+
+This server bridges an AI assistant (or dashboard, or script) to that chain:
+each MCP tool call becomes a Streamer.bot DoAction dispatch.
+
 ## Quick Facts
 
 - Ports: backend 10994 (FastAPI + FastMCP streamable HTTP at /mcp), frontend 10995 (Vite)

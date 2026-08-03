@@ -5,6 +5,18 @@ OBS stream. Two external applications must be installed and configured
 before the tools can do anything: **Streamfog** (the renderer) and
 **Streamer.bot** (the transport).
 
+## What is Streamfog?
+
+**Streamfog** is a Windows desktop app (https://streamfog.com) that puts AR
+effects on your webcam during live streams — face filters, animated lenses,
+and Vtuber-style avatars — and renders the result into OBS via a browser
+source. It has **no public API**: the only way to control it is through
+[Streamer.bot](https://streamer.bot), a free streamer automation tool that
+Streamfog integrates with. This server is the bridge that lets an AI
+assistant (or the dashboard, or a script) trigger Streamer.bot actions for
+you. Everything runs locally, and actions are fire-and-forget — Streamer.bot
+does not report outcomes, so verify the result on the stream preview.
+
 ## Prerequisite Checklist
 
 1. **Streamfog** installed from https://streamfog.com and running, camera

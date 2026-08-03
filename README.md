@@ -15,6 +15,36 @@
 
 **AI-driven AR lens orchestrator for live OBS streams.** Control Streamfog face filters, AR effects, and Vtuber avatars through MCP tools via the local Streamer.bot WebSocket bridge. Your AI assistant becomes a stream producer.
 
+## What is Streamfog?
+
+**Streamfog** is a Windows desktop app (https://streamfog.com) that streamers
+use to put AR effects on their face during live broadcasts — face filters
+("beauty smooth", "cyber helmet"), animated lenses, background effects, and
+Vtuber-style avatars. It takes your webcam feed, applies the effect in real
+time, and renders the result into OBS Studio through a browser source.
+
+Two things matter for automation:
+
+1. **Streamfog has no public API, CLI, or plugin SDK.** You cannot script it
+   directly, and it cannot tell you which lens is active. It is effectively
+   a black box that only listens to Streamer.bot.
+2. **Streamer.bot is the remote control.** [Streamer.bot](https://streamer.bot)
+   is a free automation tool for streamers. Streamfog registers itself with
+   Streamer.bot as an integration, and Streamer.bot exposes a local
+   WebSocket server that accepts `DoAction` commands by name (e.g. fire the
+   action `SetLens_BeautySmooth`).
+
+**This project is the bridge between the two**: it gives an AI assistant (or
+the dashboard, or any script) a clean tool interface — `streamfog_set_lens`,
+`streamfog_clear_effects`, `streamfog_toggle_avatar`, `streamfog_status`,
+`streamfog_list_lenses` — and translates each call into a Streamer.bot
+`DoAction` dispatch. Without this server you would have to open Streamer.bot
+and click actions manually; with it, your agent becomes a stream producer.
+
+> ⚠️ **Fire-and-forget**: Streamer.bot does not report whether an action
+> succeeded, and Streamfog cannot be queried. A tool returning "success"
+> means *dispatched*, not *applied* — confirm visually on the stream.
+
 | | |
 |--:|--|
 | **You might use this if…** | You want your AI to switch AR lenses, toggle Vtuber avatars, or clear effects during live OBS broadcasts — controlled by Twitch chat events, channel points, or agentic automation. |
@@ -22,7 +52,25 @@
 | **Ports** | Backend **10994**, Dashboard **10995** |
 | **Start** | `just bootstrap` then `start.ps1` |
 
+## How to use this server (3 steps)
+
+1. **Install the two external apps** (one-time): Streamfog + Streamer.bot,
+   enable Streamfog's integration inside Streamer.bot, and enable
+   Streamer.bot's WebSocket server on port 8080. Full walkthrough:
+   [docs/ONBOARDING.md](docs/ONBOARDING.md).
+2. **Map your lenses**: create `lenses.json` linking human-readable lens
+   names to the exact Streamer.bot action names that apply them (see
+   [Lens Map](#lens-map-lensesjson)).
+3. **Start and drive it**: `start.ps1` boots the backend + dashboard; then
+   either connect your MCP client (Claude Desktop / Cursor / opencode) over
+   stdio or `http://127.0.0.1:10994/mcp`, click lenses on the dashboard, or
+   call the REST API from scripts. All three surface the same bridge.
+
 ## Architecture
+
+Plain English: **your AI talks to this server, this server talks to
+Streamer.bot, Streamer.bot tells Streamfog what to render, and OBS shows the
+result.** Every hop is local.
 
 ```
 ┌─────────────┐     MCP            ┌──────────────────┐     WebSocket      ┌──────────────┐
@@ -40,6 +88,13 @@
                                                                          │  OBS Studio   │
                                                                          └───────────────┘
 ```
+
+- **MCP tools** (for AI agents): served over stdio or the streamable HTTP
+  endpoint at `http://127.0.0.1:10994/mcp`.
+- **REST API** (for scripts + dashboard): `/api/*` on the same port, backed
+  by the same bridge instance.
+- **Dashboard** (for humans): React SPA at `:10995` — lens grid, status
+  KPIs, chat, logs.
 
 The MCP endpoint is served at `http://127.0.0.1:10994/mcp` (streamable HTTP)
 in dual mode, alongside the REST API and dashboard.

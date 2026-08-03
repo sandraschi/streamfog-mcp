@@ -1,4 +1,16 @@
 
+
+## [Unreleased] — 2026-08-03
+
+### Added
+- README: "What is Streamfog?" primer + "How to use this server" 3-step guide + plain-English architecture explanation
+- Same primer added to docs/ONBOARDING.md and llms-full.txt (LLM-facing)
+- MCD project page mirrored with the primer
+- FLEET_INDEX.md entry for streamfog-mcp
+
+### Fixed
+- INSTALL.md: stale commands (npm → bun, module entry, Python 3.13 → 3.12+, nonexistent just recipes), added external-prerequisites section
+
 ## [0.2.0] — 2026-08-03
 
 ### Added
