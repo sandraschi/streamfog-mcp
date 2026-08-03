@@ -7,6 +7,9 @@
 - Same primer added to docs/ONBOARDING.md and llms-full.txt (LLM-facing)
 - MCD project page mirrored with the primer
 - FLEET_INDEX.md entry for streamfog-mcp
+- PRD.md (purpose, problem statement, solution, shipped features, non-goals, success criteria)
+- AGENTS.md: bun commands, streamable HTTP /mcp, pyright/biome gates, mcpb-pack + cua recipes
+- .env.example: STREAMFOG_MCP_HOST and STREAMFOG_MCP_TRANSPORT vars (match config.py)
 
 ### Fixed
 - INSTALL.md: stale commands (npm → bun, module entry, Python 3.13 → 3.12+, nonexistent just recipes), added external-prerequisites section
