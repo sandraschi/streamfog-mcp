@@ -1,4 +1,4 @@
-"""Streamfog MCP — AR lens and face-filter orchestration for OBS live streams.
+"""Streamfog MCP - AR lens and face-filter orchestration for OBS live streams.
 
 Streamfog is a third-party real-time AR platform for live streamers, built on
 Snap's Camera Kit. This MCP server bridges Streamfog to agentic automation via

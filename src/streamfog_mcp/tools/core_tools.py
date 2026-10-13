@@ -1,4 +1,4 @@
-"""Streamfog MCP core tools — lens control, effects, and status.
+"""Streamfog MCP core tools - lens control, effects, and status.
 
 [RATIONALALE] All Streamfog control flows through Streamer.bot's WebSocket API.
 These tools provide a clean, deterministic interface for LLM agents to control
@@ -85,7 +85,7 @@ async def streamfog_clear_effects() -> dict:
     the 'ClearEffects' action to Streamer.bot.
 
     ## Return Format
-    {"success": true, "message": "All effects cleared — camera returned to baseline",
+    {"success": true, "message": "All effects cleared - camera returned to baseline",
      "data": {"action": "ClearEffects"}}
 
     ## Examples
@@ -95,7 +95,7 @@ async def streamfog_clear_effects() -> dict:
     if result["success"]:
         return {
             "success": True,
-            "message": "All effects cleared — camera returned to baseline",
+            "message": "All effects cleared - camera returned to baseline",
             "data": {"action": result["action"]},
         }
     return {"success": False, "message": result["message"], "data": None}

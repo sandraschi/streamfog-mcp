@@ -1,15 +1,15 @@
-"""FastMCP singleton + shared bridge — created before tools are imported to break circular dependency."""
+"""FastMCP singleton + shared bridge - created before tools are imported to break circular dependency."""
 
 from fastmcp import FastMCP
 
 from streamfog_mcp.services.streamerbot import StreamerBotBridge
 
 DESCRIPTION = """\
-# Streamfog MCP — AR Lens Orchestrator for Live Streams
+# Streamfog MCP - AR Lens Orchestrator for Live Streams
 
 Control Streamfog AR lenses, face filters, and Vtuber avatars during live
 OBS Studio broadcasts. Bridges to Streamfog via the local Streamer.bot
-WebSocket API — no direct Streamfog API required.
+WebSocket API - no direct Streamfog API required.
 
 ## Architecture
 
@@ -32,7 +32,7 @@ Set environment variables or create `.env`:
 |----------|---------|-------------|
 | `STREAMFOG_MCP_STREAMERBOT_HOST` | `127.0.0.1` | Streamer.bot WebSocket host |
 | `STREAMFOG_MCP_STREAMERBOT_PORT` | `8080` | Streamer.bot WebSocket port |
-| `STREAMFOG_MCP_STREAMERBOT_TOKEN` | — | Streamer.bot auth token (optional) |
+| `STREAMFOG_MCP_STREAMERBOT_TOKEN` | - | Streamer.bot auth token (optional) |
 | `STREAMFOG_MCP_LENS_MAP_PATH` | `./lenses.json` | Path to lens→action mapping file |
 
 ## Lens Mapping
@@ -63,7 +63,7 @@ mcp = FastMCP(
     instructions=DESCRIPTION,
 )
 
-# Shared bridge — single instance used by both MCP tools and REST API
+# Shared bridge - single instance used by both MCP tools and REST API
 bridge = StreamerBotBridge()
 
 

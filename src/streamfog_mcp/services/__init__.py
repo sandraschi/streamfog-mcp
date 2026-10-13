@@ -1,1 +1,1 @@
-"""Streamfog MCP services — external bridge clients."""
+"""Streamfog MCP services - external bridge clients."""
